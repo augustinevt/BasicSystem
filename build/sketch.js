@@ -9,18 +9,28 @@ var makeGrid = function makeGrid(row, col) {
   return grid;
 };
 
-var initialGrid = makeGrid(9, 9, null); // const nextGrid = makeGrid(18,18, null)
+var agentDisplay = function agentDisplay(agent) {
+  if (agent.type === 0) {
+    fill('red');
+  } else if (agent.type === 1) {
+    fill('lightBlue');
+  }
 
-var sys = new System(0, 0, initialGrid);
-sys.array = sys.array.map(function (row, x) {
-  return row.map(function (col, y) {
-    return Math.floor(Math.random() * 2) === 1 ? new Agent('automaton', x, y) : new Agent('empty', x, y);
+  stroke('none');
+  rect(agent.x * 10, agent.y * 10, 10, 10);
+};
+
+var initialGrid = makeGrid(50, 50, null);
+var sys = new System(50, 50, initialGrid);
+sys.grid = initialGrid.map(function (row, y) {
+  return row.map(function (col, x) {
+    return Math.floor(Math.random() * 2) ? new Agent(0, x, y) : new Agent(1, x, y);
   });
-}); // sys.array[4][4] = new Agent('f', [mountainGenetics.scaffold], sys, 4, 4);
+});
 
 function setup() {
   createCanvas(501, 501);
-  frameRate(5);
+  frameRate();
 }
 
 function draw() {

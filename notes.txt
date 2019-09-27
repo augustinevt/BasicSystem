@@ -1,8 +1,15 @@
-setting up the thing with sockets...
+Okay, that was intense!
 
+===
 
-then let the other stuff work itself out..!
+  I made little headway for making the class take in a rule set it's definitely clunky, but it will work
 
-yeah, that would be most flexible
+  Also have the agent display function from the system class... not at all a good thing but good to prove the it can be done
 
-come up with API and set sockets on top!
+===
+
+to be honest I'm not sure where to take it, although the flux style state is is great, I think I can definitely extend this for art and game purposes!
+
+could influence "8bitart" but not sure...
+
+anyway, good fight! Now go and rest!

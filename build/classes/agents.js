@@ -6,79 +6,91 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var rules = [function (agent) {}];
+var borderManager = function borderManager(grid, x, y) {
+  var option = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'wall';
+  if (grid.length < 1 || grid[0].length < 1) throw Error('invalid grid!');
+  var height = grid.length - 1;
+  var width = grid[0].length - 1;
+
+  if (option === 'wall') {
+    if (y > height || y < 0) return false;
+    if (x > width || x < 0) return false;
+    return true;
+  }
+};
+
+var getNeighborhood = function getNeighborhood(grid, x, y, radius) {
+  var neighborhood = [];
+
+  for (var i = radius * -1; i <= radius; i++) {
+    for (var j = radius * -1; j <= radius; j++) {
+      if (!(j + x === x && i + y === y)) {
+        if (borderManager(grid, x + j, y + i)) {
+          neighborhood.push(grid[y + i][x + j].type);
+        } else {
+          neighborhood.push(1);
+        }
+      }
+    }
+  }
+
+  return neighborhood;
+};
+
+var rules = [function (agent, grid) {
+  var neighborhood = getNeighborhood(grid, agent.x, agent.y, 1);
+  var blueCount = 0;
+  neighborhood.forEach(function (_char) {
+    _char === 0 ? blueCount++ : null;
+  });
+
+  if (agent.type === 1 && blueCount === 3) {
+    return new Agent(0, agent.x, agent.y);
+  } else if (agent.type === 0 && (blueCount < 2 || blueCount > 3)) {
+    return new Agent(1, agent.x, agent.y);
+  } else {
+    return new Agent(agent.type, agent.x, agent.y);
+  }
+}];
 
 var Agent =
 /*#__PURE__*/
 function () {
-  function Agent() {
-    var type = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'automaton';
-    var x = arguments.length > 1 ? arguments[1] : undefined;
-    var y = arguments.length > 2 ? arguments[2] : undefined;
-
+  function Agent(type, x, y) {
     _classCallCheck(this, Agent);
 
     this.type = type;
     this.x = x;
     this.y = y;
-    this.rules = rules;
   }
 
   _createClass(Agent, [{
-    key: "respond",
-    value: function respond() {
-      return this.type;
-    }
-  }, {
     key: "ask",
     value: function ask(string, n) {}
   }, {
     key: "act",
-    value: function act(curr, next) {
-      var live = -1;
-      var empty = -1;
-
-      for (var i = -1; i < 2; i++) {
-        for (var j = -1; j < 2; j++) {
-          var y = 0;
-          var x = 0;
-
-          if (i < 0) {
-            y = curr.length - 1;
-          } else if (i > curr.length - 1) {
-            y = i;
-          } else {
-            this.y + i;
-          }
-
-          if (j < 0) {
-            x = curr[y].length - 1;
-          } else if (j > curr.length - 1) {
-            x = j;
-          } else {
-            this.x + j;
-          } // console.log(x, y)
-
-
-          if (sys.array[y][x].type === 'automaton') {
-            live++;
-          } else {
-            empty++;
-          }
-        }
-      }
-
-      if (this.type === 'empty' && live === 3) {
-        next[this.y][this.x] = new Agent('automaton', this.x, this.y);
-      } else if (this.type === 'automaton' && (live < 2 || live > 3)) {
-        next[this.y][this.x] = new Agent('empty', this.x, this.y);
-      } else {
-        next[this.y][this.x] = this;
-      }
+    value: function act(grid) {
+      // const neighborhood = getNeighborhood(grid, this.x, this.y, 1)
+      // let blueCount = 0;
+      //
+      // neighborhood.forEach(char => {
+      //   char === 0 ? blueCount++ : null;
+      // })
+      //
+      // if (this.type === 1 && blueCount === 3) {
+      //   return new Agent(0, this.x, this.y)
+      // } else if (this.type === 0 && (blueCount < 2 || blueCount > 3)) {
+      //   return new Agent(1, this.x, this.y)
+      // } else {
+      //   return new Agent(this.type, this.x, this.y)
+      // }
+      return rules[0](this, grid);
     }
   }, {
     key: "display",
-    value: function display() {}
+    value: function display(displayHandler) {
+      displayHandler(this);
+    }
   }]);
 
   return Agent;

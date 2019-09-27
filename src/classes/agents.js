@@ -1,78 +1,91 @@
+const borderManager = (grid, x, y, option='wall') => {
+
+  if ((grid.length < 1) || (grid[0].length < 1) ) throw Error('invalid grid!')
+
+  const height = grid.length - 1;
+  const width = grid[0].length - 1;
+
+  if (option === 'wall') {
+    if (y > height || y < 0) return false
+    if (x > width || x < 0) return false
+
+    return true
+  }
+}
+
+const getNeighborhood = (grid, x, y, radius) => {
+
+  const neighborhood = [];
+
+  for(let i = (radius * -1); i <= radius; i++) {
+    for(let j = (radius * -1); j <= radius; j++) {
+      if (!((j+x === x) && (i+y === y))) {
+        if (borderManager(grid, x+j, y+i)) {
+          neighborhood.push(grid[y+i][x+j].type)
+        } else {
+          neighborhood.push(1)
+        }
+      }
+    }
+  }
+
+  return neighborhood;
+}
+
 const rules = [
-  (agent) => {
+  (agent, grid) => {
+    const neighborhood = getNeighborhood(grid, agent.x, agent.y, 1)
+    let blueCount = 0;
+
+    neighborhood.forEach(char => {
+      char === 0 ? blueCount++ : null;
+    })
+
+    if (agent.type === 1 && blueCount === 3) {
+      return new Agent(0, agent.x, agent.y)
+    } else if (agent.type === 0 && (blueCount < 2 || blueCount > 3)) {
+      return new Agent(1, agent.x, agent.y)
+    } else {
+      return new Agent(agent.type, agent.x, agent.y)
+    }
 
   }
 ]
 
 class Agent {
 
-  constructor(type='automaton', x, y) {
+  constructor(type, x, y) {
     this.type = type;
     this.x = x;
     this.y = y;
-    this.rules = rules;
   }
-
-  respond() {
-    return this.type;
-  }
-
 
   ask(string, n) {
 
   }
 
 
-  act(curr, next) {
-    let live = -1;
-    let empty = -1;
+  act(grid) {
+      // const neighborhood = getNeighborhood(grid, this.x, this.y, 1)
+      // let blueCount = 0;
+      //
+      // neighborhood.forEach(char => {
+      //   char === 0 ? blueCount++ : null;
+      // })
+      //
+      // if (this.type === 1 && blueCount === 3) {
+      //   return new Agent(0, this.x, this.y)
+      // } else if (this.type === 0 && (blueCount < 2 || blueCount > 3)) {
+      //   return new Agent(1, this.x, this.y)
+      // } else {
+      //   return new Agent(this.type, this.x, this.y)
+      // }
 
-    for(let i = -1; i < 2; i++) {
-      for(let j = -1; j < 2; j++) {
-
-        let y = 0;
-        let x = 0;
-
-
-
-        if (i < 0) {
-          y = curr.length - 1;
-        } else if (i > (curr.length - 1)) {
-          y = i;
-        } else {
-           this.y + i
-        }
-
-        if (j < 0) {
-          x = curr[y].length - 1;
-        } else if (j > (curr.length - 1)) {
-          x = j;
-        } else {
-           this.x + j
-        }
-
-        // console.log(x, y)
-
-        if (sys.array[y][x].type === 'automaton') {
-          live++;
-        } else {
-          empty++;
-        }
-
-      }
-    }
-
-    if (this.type === 'empty' && live === 3 ) {
-      next[this.y][this.x] = new Agent('automaton', this.x, this.y)
-    } else if ( (this.type === 'automaton') && (live < 2 || live > 3) ) {
-      next[this.y][this.x] = new Agent('empty', this.x, this.y)
-    } else {
-      next[this.y][this.x] = this;
-    }
+      return rules[0](this, grid)
 
   }
 
-  display() {
-
+  display(displayHandler) {
+    displayHandler(this);
   }
 }
