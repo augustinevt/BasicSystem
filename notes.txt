@@ -1,0 +1,8 @@
+setting up the thing with sockets...
+
+
+then let the other stuff work itself out..!
+
+yeah, that would be most flexible
+
+come up with API and set sockets on top!
