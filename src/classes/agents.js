@@ -1,60 +1,78 @@
+const rules = [
+  (agent) => {
+
+  }
+]
+
 class Agent {
 
-  constructor(type, expressions, sys, x, y, status = 'passOnce') {
+  constructor(type='automaton', x, y) {
     this.type = type;
-    this.expressions = expressions;
-    this.sys = sys;
     this.x = x;
     this.y = y;
-    this.status = status;
-
+    this.rules = rules;
   }
 
   respond() {
-    // return = sys.genetics.actions[q](this/*(cell)*/) // would fire something like () => cell.type;
     return this.type;
   }
 
-  // getLatentExpressions
 
-  // also could be "getHood" or
   ask(string, n) {
-
-    if (n >= 0) {
-
-      if(this.sys.array[this.x][this.y+1] && this.sys.array[this.x][this.y+1] !== 'e') {
-        this.sys.array[this.x][this.y+1].ask(string, n-1);
-      }
-
-      string.push(this.respond());
-      // console.log(this.x, this.y, string)
-
-    } else {
-
-      return;
-
-    }
 
   }
 
 
-  act() {
-    if (this.status !== 'passOnce') {
-      if(this.expressions.length >= 1) {
-        this.expressions[0].alg(this.expressions[0].params)(sys, this);
+  act(curr, next) {
+    let live = -1;
+    let empty = -1;
+
+    for(let i = -1; i < 2; i++) {
+      for(let j = -1; j < 2; j++) {
+
+        let y = 0;
+        let x = 0;
+
+
+
+        if (i < 0) {
+          y = curr.length - 1;
+        } else if (i > (curr.length - 1)) {
+          y = i;
+        } else {
+           this.y + i
+        }
+
+        if (j < 0) {
+          x = curr[y].length - 1;
+        } else if (j > (curr.length - 1)) {
+          x = j;
+        } else {
+           this.x + j
+        }
+
+        // console.log(x, y)
+
+        if (sys.array[y][x].type === 'automaton') {
+          live++;
+        } else {
+          empty++;
+        }
+
       }
-    } else {
-      this.status = 'ready';
     }
+
+    if (this.type === 'empty' && live === 3 ) {
+      next[this.y][this.x] = new Agent('automaton', this.x, this.y)
+    } else if ( (this.type === 'automaton') && (live < 2 || live > 3) ) {
+      next[this.y][this.x] = new Agent('empty', this.x, this.y)
+    } else {
+      next[this.y][this.x] = this;
+    }
+
   }
 
   display() {
-    if (this.type === 'f') {
-      fill('brown')
-      rect(width/2, height/2, 10, 10);
-    } else {
-      fill('green')
-      rect(width/4, height/2, 5, 5);
-    }
+
   }
 }

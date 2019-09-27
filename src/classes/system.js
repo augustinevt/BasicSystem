@@ -2,43 +2,39 @@ class System {
   constructor(x, y, initArray) {
     this.x = x;
     this.y = y;
-
+    this.next = [...initArray];
     this.array = initArray;
   }
 
   runTick() {
     this.array.forEach((subArr) => {
-      subArr.forEach((agent) => {
-        if (agent !== 'e')
-          agent.act();
+      subArr.forEach((cell) => {
+        cell.act(this.array, this.next);
       })
     })
+
+    this.array = [...this.next];
+    this.next = [...this.next];
   }
 
   display() {
     this.array.forEach((subArr, i) => {
       subArr.forEach((agent, j) => {
-        if (agent === 'e') {
+        console.log(agent.type)
+        if (agent.type === 'empty') {
           fill('black');
-          stroke('black')
+          stroke('white')
           rect((this.x + j * 10), (this.y + i * 10), 10, 10);
-        } else if (agent.type === 'f') {
-          stroke('black')
-          fill('brown');
+        } else {
+          fill('yellow');
+          stroke('orange')
           rect((this.x + j * 10), (this.y + i * 10), 10, 10);
-        } else if (agent.type === 'p') {
-          fill('brown');
-          rect((this.x + j * 10), (this.y + i * 10), 10, 10);
-          fill('green');
-          stroke('green')
-          rect(((this.x + j * 10)), ((this.y + i * 10)), 10, 5);
-          rect(((this.x + j * 10) + 7), ((this.y + i * 10)), 2, 10);
-          rect(((this.x + j * 10)), ((this.y + i * 10)), 2, 10);
         }
-
-        // stroke('white');
-        // rect((this.x + j * 10), (this.y + i * 10), 10, 10);
       })
     })
   }
 }
+
+
+
+
