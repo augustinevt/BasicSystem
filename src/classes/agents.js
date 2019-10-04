@@ -52,7 +52,7 @@ const rules = [
   }
 ]
 
-class Agent {
+export default class Agent {
 
   constructor(type, x, y) {
     this.type = type;

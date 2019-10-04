@@ -1,6 +1,4 @@
-export const sensitiveWords = (content, words) => (
-  content.replace(
-    new RegExp(words.join('|'), 'ig'),
-    '****'
-  )
-)
+import System from './classes/system'
+
+export default System
+

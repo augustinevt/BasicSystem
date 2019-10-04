@@ -3,10 +3,11 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.sensitiveWords = void 0;
+exports["default"] = void 0;
 
-var sensitiveWords = function sensitiveWords(content, words) {
-  return content.replace(new RegExp(words.join('|'), 'ig'), '****');
-};
+var _system = _interopRequireDefault(require("./classes/system"));
 
-exports.sensitiveWords = sensitiveWords;
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+var _default = _system["default"];
+exports["default"] = _default;
