@@ -11,6 +11,12 @@
     "prepare": "npm run build ",
     "release": "np"
   },
+  "jest": {
+   "testPathIgnorePatterns": [
+     "/node_modules/",
+     "/build/"
+   ]
+  },
   "repository": {
     "type": "git",
     "url": ""

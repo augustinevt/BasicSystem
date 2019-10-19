@@ -13,3 +13,24 @@ to be honest I'm not sure where to take it, although the flux style state is is 
 could influence "8bitart" but not sure...
 
 anyway, good fight! Now go and rest!
+
+====== conway rules ====
+
+// (agent, grid) => {
+//   const neighborhood = getNeighborhood(grid, agent.x, agent.y, 1)
+//   let blueCount = 0;
+//
+//   neighborhood.forEach(char => {
+//     char === 0 ? blueCount++ : null;
+//   })
+//
+//   if (agent.type === 1 && blueCount === 3) {
+//     return new Agent(0, agent.x, agent.y)
+//   } else if (agent.type === 0 && (blueCount < 2 || blueCount > 3)) {
+//     return new Agent(1, agent.x, agent.y)
+//   } else {
+//     return new Agent(agent.type, agent.x, agent.y)
+//   }
+//
+// }
+// ]

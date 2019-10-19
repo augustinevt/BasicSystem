@@ -4,47 +4,42 @@ export default class System {
   constructor(row, col) {
     this.row = row
     this.col = col
+    this.gen = 0
+    this.grid = []
   }
 
   setAgentDisplay(agentDisplay) {
     this.agentDisplay = agentDisplay
   }
 
-  makeGrid(col, row, initVal=null) {
-      const grid = new Array(row).fill(null)
+  setAgentRules(agentRules) {
+    this.agentRules = agentRules
+  }
 
-      grid.forEach((row, i) => {
-        grid[i] = new Array(col).fill(initVal)
-      })
-
-    return grid
+  setInGrid(x, y, value) {
+    this.grid[y][x] = value
   }
 
   initGrid() {
-    const newGrid = this.makeGrid(this.col, this.row)
-      .map((row, y) => row.map((col, x) => Math.floor((Math.random() * 2)) ?
-      new Agent(0, x, y) :
-      new Agent(1, x , y)
-    ))
-
-    this.grid = newGrid
+    const grid = new Array(this.col).fill(null).map((_, i) => new Agent(0, i, this.gen));
+    this.grid = [grid];
   }
 
   runTick() {
-    const newGrid = this.makeGrid(this.row, this.col)
-    this.grid.forEach((row, i) => {
-      row.forEach((colCell, j) => {
-        newGrid[i][j] = colCell.act(this.grid);
-      })
+    const newGrid = new Array(this.col).fill(null).map((_, i) => new Agent(0, i, this.gen+1))
+
+    this.grid[this.gen].forEach((row, i) => {
+      newGrid[i].act(this.grid, this.agentRules)
     })
 
-    this.grid = newGrid
+    this.grid.push(newGrid)
+    this.gen++
   }
 
   display() {
     this.grid.forEach((subArr, i) => {
-      subArr.forEach((agent, j) => {
-        agent.display(this.agentDisplay)
+      Array.isArray(subArr) && subArr.forEach((agent, j) => {
+        agent ? agent.display(this.agentDisplay) : this.agentDisplay({type: null, x: j, y: i})
       })
     })
   }

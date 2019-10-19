@@ -23,6 +23,8 @@ function () {
 
     this.row = row;
     this.col = col;
+    this.gen = 0;
+    this.grid = [];
   }
 
   _createClass(System, [{
@@ -31,46 +33,51 @@ function () {
       this.agentDisplay = agentDisplay;
     }
   }, {
-    key: "makeGrid",
-    value: function makeGrid(col, row) {
-      var initVal = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-      var grid = new Array(row).fill(null);
-      grid.forEach(function (row, i) {
-        grid[i] = new Array(col).fill(initVal);
-      });
-      return grid;
+    key: "setAgentRules",
+    value: function setAgentRules(agentRules) {
+      this.agentRules = agentRules;
+    }
+  }, {
+    key: "setInGrid",
+    value: function setInGrid(x, y, value) {
+      this.grid[y][x] = value;
     }
   }, {
     key: "initGrid",
     value: function initGrid() {
-      var newGrid = this.makeGrid(this.col, this.row).map(function (row, y) {
-        return row.map(function (col, x) {
-          return Math.floor(Math.random() * 2) ? new _agents["default"](0, x, y) : new _agents["default"](1, x, y);
-        });
+      var _this = this;
+
+      var grid = new Array(this.col).fill(null).map(function (_, i) {
+        return new _agents["default"](0, i, _this.gen);
       });
-      this.grid = newGrid;
+      this.grid = [grid];
     }
   }, {
     key: "runTick",
     value: function runTick() {
-      var _this = this;
+      var _this2 = this;
 
-      var newGrid = this.makeGrid(this.row, this.col);
-      this.grid.forEach(function (row, i) {
-        row.forEach(function (colCell, j) {
-          newGrid[i][j] = colCell.act(_this.grid);
-        });
+      var newGrid = new Array(this.col).fill(null).map(function (_, i) {
+        return new _agents["default"](0, i, _this2.gen + 1);
       });
-      this.grid = newGrid;
+      this.grid[this.gen].forEach(function (row, i) {
+        newGrid[i].act(_this2.grid, _this2.agentRules);
+      });
+      this.grid.push(newGrid);
+      this.gen++;
     }
   }, {
     key: "display",
     value: function display() {
-      var _this2 = this;
+      var _this3 = this;
 
       this.grid.forEach(function (subArr, i) {
-        subArr.forEach(function (agent, j) {
-          agent.display(_this2.agentDisplay);
+        Array.isArray(subArr) && subArr.forEach(function (agent, j) {
+          agent ? agent.display(_this3.agentDisplay) : _this3.agentDisplay({
+            type: null,
+            x: j,
+            y: i
+          });
         });
       });
     }
