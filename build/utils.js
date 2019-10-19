@@ -13,12 +13,6 @@ function _iterableToArrayLimit(arr, i) { if (!(Symbol.iterator in Object(arr) ||
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-// const makeGrid = (rows, columns, val=null) => {
-//   const grid = [].fill(val, 0, rows)
-//   grid.forEach((cell, i) => Array.prototype.fill(val, 0, columns))
-//
-//   return grid;
-// }
 var getCell = function getCell(grid, x, y) {
   return grid[y][x];
 }; // returns [x,y] where indexes equal operation to be performed on current x/y
