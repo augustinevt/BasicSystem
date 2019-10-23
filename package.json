@@ -41,5 +41,7 @@
     "np": "^5.0.3",
     "watch": "^1.0.2"
   },
-  "dependencies": {}
+  "dependencies": {
+    "npm": "^6.12.0"
+  }
 }
