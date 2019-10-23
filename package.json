@@ -38,7 +38,7 @@
     "@babel/core": "^7.6.0",
     "@babel/preset-env": "^7.6.0",
     "jest": "^24.9.0",
-    "np": "^5.0.3",
+    "np": "^5.1.1",
     "watch": "^1.0.2"
   },
   "dependencies": {
