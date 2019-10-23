@@ -1,4 +1,4 @@
-import { getCell, getCardinal, getNeighborhood, borderManager } from './../utils'
+import { getCell, getCardinal, getNeighborhood, borderManager } from './utils'
 
 const testGrid = [
   ['0:0','1:0', '2:0', '3:0', '4:0'],
